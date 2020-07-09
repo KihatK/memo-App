@@ -1,9 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, Button, View, Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Memo = () => {
     const [memo, setMemo] = useState('');
     const [memoList, setMemoList] = useState<string[]>([]);
+    const countRef = useRef(false);
 
     const changeMemo = useCallback(text => {
         setMemo(text);
@@ -53,6 +55,24 @@ const Memo = () => {
             }],
         );
     }, []);
+
+    useEffect(() => {
+        async function dataFetch () {
+            const data = await AsyncStorage.getItem('todos');
+            const parsedData = JSON.parse(data || '[]');
+            setMemoList(parsedData);
+        }
+        dataFetch();
+    }, []);
+
+    useEffect(() => {
+        if (!countRef.current) {
+            countRef.current = true;
+        }
+        else {
+            AsyncStorage.setItem('todos', JSON.stringify(memoList));
+        }
+    }, [memoList]);
 
     return (
         <SafeAreaView style={styles.containers}>
