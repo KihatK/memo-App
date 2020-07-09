@@ -1,21 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Router, Stack, Scene } from 'react-native-router-flux';
+
+import Home from './components/Home';
+import Info from './components/Info';
+import Memo from './components/Memo';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    return (
+        <Router>
+            <Stack key="root">
+                <Scene key="home" component={Home} title="홈"/>
+                <Scene key="info" component={Info} title="정보"/>
+                <Scene key="memo" component={Memo} title="메모"/>
+            </Stack>
+        </Router>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
